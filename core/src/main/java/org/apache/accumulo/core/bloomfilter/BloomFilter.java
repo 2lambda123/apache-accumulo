@@ -30,6 +30,7 @@
  */
 package org.apache.accumulo.core.bloomfilter;
 
+import io.github.pixee.security.ObjectInputFilters;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInput;
 import java.io.DataInputStream;
@@ -204,6 +205,7 @@ public class BloomFilter extends Filter {
 
     if (super.getSerialVersion() == super.getVersion()) {
       ObjectInputStream ois = new ObjectInputStream((DataInputStream) in);
+      ObjectInputFilters.enableObjectFilterIfUnprotected(ois);
       try {
         bits = (BitSet) ois.readObject();
       } catch (ClassNotFoundException e) {
