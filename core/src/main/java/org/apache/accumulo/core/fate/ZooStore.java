@@ -18,6 +18,7 @@
  */
 package org.apache.accumulo.core.fate;
 
+import io.github.pixee.security.ObjectInputFilters;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.apache.accumulo.core.util.UtilWaitThread.sleepUninterruptibly;
@@ -84,6 +85,7 @@ public class ZooStore<T> implements TStore<T> {
   private Object deserialize(byte[] ser) {
     try (ByteArrayInputStream bais = new ByteArrayInputStream(ser);
         ObjectInputStream ois = new ObjectInputStream(bais)) {
+      ObjectInputFilters.enableObjectFilterIfUnprotected(ois);
       return ois.readObject();
     } catch (Exception e) {
       throw new RuntimeException(e);
